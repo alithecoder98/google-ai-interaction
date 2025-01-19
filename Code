@@ -1,0 +1,29 @@
+# Import necessary libraries
+from langchain_google_genai import ChatGoogleGenerativeAI
+from google.colab import userdata
+from langchain_core.messages import HumanMessage, AIMessage
+
+# Retrieve the API key securely from the userdata
+api = userdata.get('api')  # Make sure your API key is saved under 'api' in userdata
+
+# Initialize the ChatGoogleGenerativeAI with the model and API key
+llm = ChatGoogleGenerativeAI(
+    model="gemini-1.5-flash",  # Model type, can be changed to another model if needed
+    api_key=api,  # The API key for authentication
+    temperature=0  # Set temperature for model responses (0 for deterministic outputs)
+)
+
+# Test the model by sending a simple "hi" message
+result = llm.invoke("hi")
+print(result)  # Print the response
+
+# Collect user input for a custom message
+nam = input("Enter your name: ")  # Ask for the user's name
+cont = input("Enter your message: ")  # Ask for the user's message
+
+# Create a HumanMessage with the user's name and message
+msg = HumanMessage(content=cont, name=nam)
+
+# Send the message to the model and get a response
+message = [msg]  # List of messages for context
+llm.invoke(message)  # Invoke the model with the user's input message
